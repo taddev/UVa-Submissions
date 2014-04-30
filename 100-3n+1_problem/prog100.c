@@ -37,29 +37,18 @@ int findLargestCycle(int start, int end) {
 int main(){
 	int start,end, i;
 	int largest = 0;
-	char inputBuffer[14];
-	char *endBuffer;
 
-	while(1) {
-		fgets(inputBuffer, 14, stdin);
-		start = (int) strtol(inputBuffer, &endBuffer, 10);
-		end = (int) strtol(endBuffer, &endBuffer, 10);
-
+	while(scanf("%d %d\n", &start, &end) != EOF) {
 		printf("%d %d ", start, end);
 
-		if(start != 0 && end != 0) {
-			if(start > end) {
-				largest = findLargestCycle(end, start);
-			}
-			else{
-				largest = findLargestCycle(start, end);
-			}
+		if(start > end) {
+			largest = findLargestCycle(end, start);
+		}
+		else{
+			largest = findLargestCycle(start, end);
+		}
 
-			printf("%d\n", largest);
-		}
-		else {
-			break;
-		}
+		printf("%d\n", largest);
 	}
 
 	return 0;
