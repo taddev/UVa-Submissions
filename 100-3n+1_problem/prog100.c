@@ -1,16 +1,16 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 
 int findCycles(int i) {
 	int n = i;
 	int count = 1;
 
-	while(n != 1){
-		if(n%2 == 0){
-			n = n >> 1;
+	while(n != 1) {
+		if(n&1 != 0){
+			n = (3 * n) + 1;
 		}
 		else {
-			n = (3 * n) + 1;
+			n = n >> 1;
 		}
 		count++;
 	}
@@ -35,20 +35,39 @@ int findLargestCycle(int start, int end) {
 }
 
 int main(){
-	int start,end, i;
+	int start 	= 0;
+	int end 	= 0;
+	int i 		= 0;
 	int largest = 0;
+	char inputBuffer[20];
+	char *endBuffer;
 
-	while(scanf("%d %d\n", &start, &end) != EOF) {
+	while(fgets(inputBuffer, 19, stdin) != NULL) {
+		start = (int) strtol(inputBuffer, &endBuffer, 10);
+		end = (int) strtol(endBuffer, &endBuffer, 10);
+
 		printf("%d %d ", start, end);
 
 		if(start > end) {
 			largest = findLargestCycle(end, start);
+		}
+		else if(start == end){
+			largest = findCycles(start);
 		}
 		else{
 			largest = findLargestCycle(start, end);
 		}
 
 		printf("%d\n", largest);
+
+		/* cleanup
+		fflush(stdin);
+		inputBuffer[0] = '\0';
+		endBuffer = NULL;
+		largest = 0;
+		start = 0;
+		end = 0;
+		*/
 	}
 
 	return 0;
