@@ -204,12 +204,20 @@ void moveOverBlock(int blockA, int blockB) {
 
 	clearAbove(ptrBlockA);
 
-	/* find top */
+	/* if block A is on a stack break it free from that stack before moving
+	   it over another stack */
+	if(ptrBlockA->below != NULL){
+		ptrBlockA->below->above = NULL;
+	}
+
+	/* find the top of the stack containig block B */
 	ptrBlockB = findTop(ptrBlockB);
 
 	/* add A to the top of B's stack */
 	ptrBlockB->above = ptrBlockA;
 	ptrBlockA->below = ptrBlockB;
+
+	/* make sure block A's initial position is cleared */
 	blockArray[blockA] = NULL;
 }
 
@@ -223,15 +231,24 @@ void pileOntoBlock(int blockA, int blockB) {
 	struct block *ptrBlockA = NULL;
 	struct block *ptrBlockB = NULL;
 
+	/* find blocks based on their ID */
 	ptrBlockA = findBlock(blockA);
 	ptrBlockB = findBlock(blockB);
 
+	/* reset all the blocks currently above block B */
 	clearAbove(ptrBlockB);
 
-	ptrBlockA->below->above = NULL;
+	/* if block A is currently on a stack break it free from that stack */
+	if(ptrBlockA->below != NULL){
+		ptrBlockA->below->above = NULL;
+	}
 
+	/* pile the stack starting at A onto whatever is already on B */
 	ptrBlockB->above = ptrBlockA;
 	ptrBlockA->below = ptrBlockB;
+
+	/* make sure block A's initial position is cleared */
+	blockArray[blockA] = NULL;
 }
 
 int main() {
