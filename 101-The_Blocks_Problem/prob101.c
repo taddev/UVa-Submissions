@@ -243,6 +243,12 @@ void pileOntoBlock(int blockA, int blockB) {
 		ptrBlockA->below->above = NULL;
 	}
 
+	/* this fixes the case where the two blocks get reversed, but this only assumes direct stacking
+	   there is still an issue of block reversal for any other combinations
+	if(ptrBlockA->above == ptrBlockB){
+		resetBlock(ptrBlockB);
+	}*/
+
 	/* pile the stack starting at A onto whatever is already on B */
 	ptrBlockB->above = ptrBlockA;
 	ptrBlockA->below = ptrBlockB;
