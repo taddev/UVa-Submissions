@@ -137,6 +137,7 @@ void resetBlock(struct block *blockPTR){
 		blockPTR->above = NULL;
 
 		blockArray[blockPTR->id] = blockPTR;
+		blockArray[blockPTR->id]->stack = blockPTR->id;
 	}
 }
 
@@ -180,6 +181,12 @@ void moveOntoBlock(int blockA, int blockB){
 	ptrBlockA = findBlock(blockA);
 	ptrBlockB = findBlock(blockB);
 
+	/* check to see if the blocks are in the same stack. This is an illegal
+	   condition so we'll return if true and not modify anything. */
+	if(ptrBlockA->stack == ptrBlockB->stack){
+		return;
+	}
+
 	/* clear all blocks above the two blocks in question */
 	clearAbove(ptrBlockA);
 	clearAbove(ptrBlockB);
@@ -194,6 +201,7 @@ void moveOntoBlock(int blockA, int blockB){
 	/* move block A onto block B */
 	ptrBlockB->above = ptrBlockA;
 	ptrBlockA->below = ptrBlockB;
+	ptrBlockA->stack = ptrBlockB->stack;
 
 	/* make sure the initial position of block A is empty */
 	blockArray[blockA] = NULL;
@@ -211,6 +219,12 @@ void moveOverBlock(int blockA, int blockB) {
 	ptrBlockA = findBlock(blockA);
 	ptrBlockB = findBlock(blockB);
 
+	/* check to see if the blocks are in the same stack. This is an illegal
+	   condition so we'll return if true and not modify anything. */
+	if(ptrBlockA->stack == ptrBlockB->stack){
+		return;
+	}
+
 	clearAbove(ptrBlockA);
 
 	/* if block A is on a stack break it free from that stack before moving
@@ -225,6 +239,7 @@ void moveOverBlock(int blockA, int blockB) {
 	/* add A to the top of B's stack */
 	ptrBlockB->above = ptrBlockA;
 	ptrBlockA->below = ptrBlockB;
+	ptrBlockA->stack = ptrBlockB->stack;
 
 	/* make sure block A's initial position is cleared */
 	blockArray[blockA] = NULL;
@@ -239,10 +254,17 @@ void moveOverBlock(int blockA, int blockB) {
 void pileOntoBlock(int blockA, int blockB) {
 	struct block *ptrBlockA = NULL;
 	struct block *ptrBlockB = NULL;
+	struct block *temp = NULL;
 
 	/* find blocks based on their ID */
 	ptrBlockA = findBlock(blockA);
 	ptrBlockB = findBlock(blockB);
+
+	/* check to see if the blocks are in the same stack. This is an illegal
+	   condition so we'll return if true and not modify anything. */
+	if(ptrBlockA->stack == ptrBlockB->stack){
+		return;
+	}
 
 	/* reset all the blocks currently above block B */
 	clearAbove(ptrBlockB);
@@ -252,19 +274,64 @@ void pileOntoBlock(int blockA, int blockB) {
 		ptrBlockA->below->above = NULL;
 	}
 
-	/* this fixes the case where the two blocks get reversed, but this only assumes direct stacking
-	   there is still an issue of block reversal for any other combinations
-	if(ptrBlockA->above == ptrBlockB){
-		resetBlock(ptrBlockB);
-	}*/
-
 	/* pile the stack starting at A onto whatever is already on B */
 	ptrBlockB->above = ptrBlockA;
 	ptrBlockA->below = ptrBlockB;
 
+	/* reassign all stack IDs in the pile of blocks */
+	temp = ptrBlockA;
+	while(temp != NULL){
+		temp->stack = ptrBlockB->stack;
+		temp = temp->above;
+	}
+
 	/* make sure block A's initial position is cleared */
 	blockArray[blockA] = NULL;
 }
+
+/*
+ * pileOverBlock
+ *
+ * move the stack starting at block A over the stack containing block B
+ */
+ void pileOverBlock(int blockA, int blockB){
+	struct block *ptrBlockA = NULL;
+	struct block *ptrBlockB = NULL;
+	struct block *temp = NULL;
+
+	/* find blocks based on their ID */
+	ptrBlockA = findBlock(blockA);
+	ptrBlockB = findBlock(blockB);
+
+	/* check to see if the blocks are in the same stack. This is an illegal
+	   condition so we'll return if true and not modify anything. */
+	if(ptrBlockA->stack == ptrBlockB->stack){
+		return;
+	}
+
+	/* if block A is currently on a stack break it free from that stack */
+	if(ptrBlockA->below != NULL){
+		ptrBlockA->below->above = NULL;
+	}
+
+	/* find the top of the stack containig block B */
+	ptrBlockB = findTop(ptrBlockB);
+
+	/* pile the stack starting at A onto the top of the stack
+	   containing block B */
+	ptrBlockB->above = ptrBlockA;
+	ptrBlockA->below = ptrBlockB;
+
+	/* reassign all stack IDs in the pile of blocks */
+	temp = ptrBlockA;
+	while(temp != NULL){
+		temp->stack = ptrBlockB->stack;
+		temp = temp->above;
+	}
+
+	/* make sure block A's initial position is cleared */
+	blockArray[blockA] = NULL;
+ }
 
 int main() {
 	char inputBuffer[20] = "\0";
@@ -303,6 +370,7 @@ int main() {
 				}
 				else if(strncmp(command[2], "over", 4) == 0) {
 					/*pile a over b*/
+					pileOverBlock(blockA, blockB);
 				}
 			}
 			else if(strncmp(command[1], "prin", 4) == 0) {
