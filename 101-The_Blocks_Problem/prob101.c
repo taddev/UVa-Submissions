@@ -7,6 +7,7 @@
  */
 struct block {
 	int id;
+	int stack;
 	struct block *above;
 	struct block *below;
 };
@@ -30,6 +31,7 @@ void initializeArray() {
 	for(i=0; i<blockCount; i++){
 		blockArray[i] = (struct block *)malloc(sizeof(struct block));
 		blockArray[i]->id = i;
+		blockArray[i]->stack = i;
 		blockArray[i]->above = NULL;
 		blockArray[i]->below = NULL;
 	}
@@ -63,11 +65,18 @@ void printArray(){
  * clean up array
  */
 void cleanupArray(){
+	struct block *temp1 = NULL;
+	struct block *temp2 = NULL;
 	int i = 0;
 
 	/* cleanup array */
 	for(i=0; i<blockCount; i++){
-		free(blockArray[i]);
+		temp1 = blockArray[i];
+		while(temp1 != NULL){
+			temp2 = temp1;
+			temp1 = temp1->above;
+			free(temp2);
+		}
 	}
 }
 
