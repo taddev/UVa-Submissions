@@ -7,8 +7,13 @@ CC=gcc
 # Compile here also
 CFLAGS=-lm -lcrypt -O2 -pipe -ansi -DONLINE_JUDGE
 
-all:
+# Problem number
+PROBLEM=prog100
 
+all: $(PROBLEM)
+
+$(PROBLEM): $(PROBLEM).c
+	$(CC) $(CFLAGS) $(PROBLEM).c -o $(PROBLEM)
 
 clean:
-	rm -rf *.exe* *.o *.out
+	rm -rf *.exe* $(PROBLEM) *.o

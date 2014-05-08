@@ -8,7 +8,7 @@ CC=gcc
 CFLAGS=-lm -lcrypt -O2 -pipe -ansi -DONLINE_JUDGE
 
 # Problem number
-PROBLEM=prob101
+PROBLEM=102
 
 all: $(PROBLEM)
 
