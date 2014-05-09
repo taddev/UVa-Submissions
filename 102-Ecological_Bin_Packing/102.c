@@ -26,13 +26,7 @@ int main() {
 	int j = 0;
 	long moves[6] = {0};
 	int least = 0;
-	char moveCombos[][4] = {"BCG",
-							"BGC",
-							"CBG",
-							"CGB",
-							"GBC",
-							"GCB"
-							};
+	char moveCombos[][4] = {"BCG", "BGC", "CBG", "CGB", "GBC", "GCB" };
 
 
 	while(fgets(inputBuffer, 255, stdin) != NULL){
