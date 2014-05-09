@@ -1,0 +1,51 @@
+/* BCG */
+moves = 0;
+printf("%s", moveCombos[0]);
+moves += binArray[1][0] + binArray[2][0];
+moves += binArray[0][2] + binArray[2][2];
+moves += binArray[0][1] + binArray[1][1];
+printf(" %d\n", moves);
+
+/* CBG */
+moves = 0;
+printf("%s", moveCombos[1]);
+moves += binArray[1][2] + binArray[2][2];
+moves += binArray[0][0] + binArray[2][0];
+moves += binArray[0][1] + binArray[1][1];
+printf(" %d\n", moves);
+
+/* GBC */
+moves = 0;
+printf("%s", moveCombos[2]);
+moves += binArray[1][1] + binArray[2][1];
+moves += binArray[0][0] + binArray[2][0];
+moves += binArray[0][2] + binArray[1][2];
+printf(" %d\n", moves);
+
+/* BGC */
+moves = 0;
+printf("%s", moveCombos[3]);
+moves += binArray[1][0] + binArray[2][0];
+moves += binArray[0][1] + binArray[2][1];
+moves += binArray[0][2] + binArray[1][2];
+printf(" %d\n", moves);
+
+/* CGB */
+moves = 0;
+printf("%s", moveCombos[4]);
+moves += binArray[1][2] + binArray[2][2];
+moves += binArray[0][1] + binArray[2][1];
+moves += binArray[0][0] + binArray[1][0];
+printf(" %d\n", moves);
+
+/* GCB */
+moves = 0;
+printf("%s", moveCombos[5]);
+moves += binArray[1][1] + binArray[2][1];
+moves += binArray[0][2] + binArray[2][2];
+moves += binArray[0][0] + binArray[1][0];
+printf(" %d\n", moves);
+
+for(i=0; i<6 i++){
+
+}
